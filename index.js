@@ -4,9 +4,6 @@ const db = require("./db");
 const app = express();
 app.use(express.json());
 
-// ----------------------------------------
-// CREATE Student
-// ----------------------------------------
 app.post("/student", (req, res) => {
   const { name, age, course, marks } = req.body;
 
@@ -17,9 +14,7 @@ app.post("/student", (req, res) => {
   });
 });
 
-// ----------------------------------------
-// READ All Students
-// ----------------------------------------
+
 app.get("/students", (req, res) => {
   const sql = "SELECT * FROM students";
   db.query(sql, (err, data) => {
@@ -28,9 +23,7 @@ app.get("/students", (req, res) => {
   });
 });
 
-// ----------------------------------------
-// READ Single Student
-// ----------------------------------------
+
 app.get("/student/:id", (req, res) => {
   const sql = "SELECT * FROM students WHERE id = ?";
   db.query(sql, [req.params.id], (err, data) => {
@@ -39,9 +32,7 @@ app.get("/student/:id", (req, res) => {
   });
 });
 
-// ----------------------------------------
-// UPDATE Student
-// ----------------------------------------
+
 app.put("/student/:id", (req, res) => {
   const { name, age, course, marks } = req.body;
 
@@ -58,9 +49,7 @@ app.put("/student/:id", (req, res) => {
   });
 });
 
-// ----------------------------------------
-// DELETE Student
-// ----------------------------------------
+
 app.delete("/student/:id", (req, res) => {
   const sql = "DELETE FROM students WHERE id = ?";
   db.query(sql, [req.params.id], (err) => {
@@ -69,9 +58,6 @@ app.delete("/student/:id", (req, res) => {
   });
 });
 
-// ----------------------------------------
-// EXTRA FEATURE: Search by Name
-// ----------------------------------------
 app.get("/students/search", (req, res) => {
   const { name } = req.query;
 
@@ -84,9 +70,6 @@ app.get("/students/search", (req, res) => {
   });
 });
 
-// ----------------------------------------
-// EXTRA FEATURE: Find Students with marks > 50
-// ----------------------------------------
 app.get("/students/pass", (req, res) => {
   const sql = "SELECT * FROM students WHERE marks >= 50";
 
@@ -96,7 +79,6 @@ app.get("/students/pass", (req, res) => {
   });
 });
 
-// Server
 app.listen(3000, () => {
   console.log("Student API running on http://localhost:3000");
 });
