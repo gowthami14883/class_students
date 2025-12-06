@@ -8,3 +8,4 @@ router.get("/get/:id", marksController.getMarks);
 router.put("/update/:id", validateMarks, marksController.updateMarks);
 router.delete("/delete/:id", marksController.deleteMarks);
 module.exports = router;
+

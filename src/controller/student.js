@@ -59,7 +59,7 @@ exports.deleteStudent = (req, res) => {
   );
 };
 
-// ===================== NEW: GET STUDENT + MARKS TOGETHER =====================
+// ===================== GET STUDENT + MARKS + PERCENTAGE + GRADE =====================
 exports.getFullDetails = (req, res) => {
   const id = req.params.id;
 
@@ -72,13 +72,39 @@ exports.getFullDetails = (req, res) => {
     if (studentResult.length === 0)
       return res.status(404).json({ error: "Student not found" });
 
-    // Fetch marks
     db.query(marksQuery, [id], (err2, marksResult) => {
       if (err2) return res.status(500).json({ error: "DB Error" });
 
+      if (marksResult.length === 0) {
+        return res.json({
+          student: studentResult[0],
+          marks: "No marks found",
+        });
+      }
+
+      const m = marksResult[0];
+
+      // ===================== CALCULATE TOTAL, PERCENTAGE =====================
+      const total =
+        m.sub1 + m.sub2 + m.sub3 + m.sub4 + m.sub5 + m.sub6;
+
+      const percentage = (total / 600) * 100;
+
+      // ===================== CALCULATE GRADE =====================
+      let grade = "";
+      if (percentage >= 90) grade = "A+";
+      else if (percentage >= 80) grade = "A";
+      else if (percentage >= 70) grade = "B";
+      else if (percentage >= 60) grade = "C";
+      else if (percentage >= 50) grade = "D";
+      else grade = "Fail";
+
       return res.json({
         student: studentResult[0],
-        marks: marksResult[0] || "No marks found",
+        marks: m,
+        total: total,
+        percentage: percentage.toFixed(2),
+        grade: grade,
       });
     });
   });
