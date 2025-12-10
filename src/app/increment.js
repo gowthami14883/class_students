@@ -1,7 +1,14 @@
 const express = require("express");
 const app = express();
+const { validationForm } = require("./validation");
 app.use(express.json());
 app.post("/count", (req, res) => {
+    let check = validationForm(req, res, false, "Missing 'text' field in body");
+
+    if (!check.success) {
+        return; 
+    }
+
 let str = req.body.text.toLowerCase();
 let count = {};
 for(let i of str){
