@@ -7,6 +7,7 @@ function validationForm(req, res, success, data) {
         return res.status(400).json({ success: false, message: "text must be a string" });
     }
     return { success: true };
+
 }
 
 module.exports = { validationForm };

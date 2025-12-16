@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 
 app.get("/reverse", (req, res) => {
-    const name = req.query.name
+    const name = req.query.name 
     const reversed = name.split(" ").map(word => word.split("").reverse().join("")).join(" ");                     
     res.send({
         original: name,

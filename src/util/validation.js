@@ -16,7 +16,6 @@ const validation = (success, dataOrMessage, res) => {
 
 module.exports = { validation };
 
-// Optional: validation function to check student input
 const validateStudentInput = ({ name }) => {
   if (!name || name.trim() === "") {
     return { success: false, message: "Name is required" };
