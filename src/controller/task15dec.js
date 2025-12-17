@@ -1,3 +1,4 @@
+
 const APIResponse = require("./apiResponse");
 exports.variable = (req, res) => {
     const { text } = req.body;
@@ -51,5 +52,121 @@ exports.test1 = (req, res) => {
         res,
         "Success",
         { message }
+    );
+};
+
+
+exports.test2 = (req, res) => {
+    const { students } = req.body;
+
+    if (!students) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "students is required"
+        );
+    }
+
+    if (!Array.isArray(students)) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "students must be an array"
+        );
+    }
+
+    students[0]?.push("gowthami");
+
+    students[1]?.unshift("vaishnavi");
+
+    students[2]?.push("gowthami");
+
+    const removedLastStudent = students.pop();
+
+    const removedFirstStudent = students.shift();
+
+    students.unshift([0, "Gopi", 72, "C"]);
+
+    students.push([4, "Anu", 88, "A"]);
+
+    const hasAnu = students.some(student => student.includes("Anu"));
+
+    return APIResponse.successResponse(
+        res,
+        "Students array processed successfully",
+        {
+            students,
+            removedFirstStudent,
+            removedLastStudent,
+            hasAnu
+        }
+    );
+};
+
+
+exports.test3 = (req, res) => {
+    const { length, breadth } = req.body;
+
+    if (!length && !breadth) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "length and breadth are required"
+        );
+    } 
+    else if (!length) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "length is required"
+        );
+    } 
+    else if (!breadth) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "breadth is required"
+        );
+    }
+
+    if (typeof length !== "number" || typeof breadth !== "number") {
+        return APIResponse.validationErrorResponse(
+            res,
+            "length and breadth must be numbers"
+        );
+    }
+
+    const perimeter = 2 * (length + breadth);
+
+    return APIResponse.successResponse(
+        res,
+        "Perimeter calculated successfully",
+        { perimeter }
+    );
+};
+
+exports.test4 = (req, res) => {
+    const { temp } = req.body;
+
+    // Validation: temp is required
+    if (temp === undefined) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "temp is required"
+        );
+    }
+
+    if (typeof temp !== "number") {
+        return APIResponse.validationErrorResponse(
+            res,
+            "temp must be a number"
+        );
+    }
+
+    let message;
+    if (temp > 30) {
+        message = "It's hot";
+    } else {
+        message = "It's moderate/cool";
+    }
+    return APIResponse.successResponse(
+        res,
+        "Success",
+        { temp, message }
     );
 };
