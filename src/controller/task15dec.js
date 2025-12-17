@@ -101,7 +101,6 @@ exports.test2 = (req, res) => {
     );
 };
 
-
 exports.test3 = (req, res) => {
     const { length, breadth } = req.body;
 
@@ -143,7 +142,6 @@ exports.test3 = (req, res) => {
 exports.test4 = (req, res) => {
     const { temp } = req.body;
 
-    // Validation: temp is required
     if (temp === undefined) {
         return APIResponse.validationErrorResponse(
             res,
