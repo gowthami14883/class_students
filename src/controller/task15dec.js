@@ -208,7 +208,7 @@ exports.test5 = (req, res) => {
 };
 
 
-exports.createDog = (req, res) => {
+exports.test6 = (req, res) => {
     const { name, breed } = req.body;
 
     if (!name && !breed) {
@@ -247,7 +247,7 @@ exports.createDog = (req, res) => {
     );
 };
 
-exports.calculatorThis = (req, res) => {
+exports.test7 = (req, res) => {
     const { a, b } = req.body;
 
     if (a === undefined || b === undefined) {
