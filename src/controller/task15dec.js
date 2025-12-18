@@ -1,5 +1,9 @@
 
 const APIResponse = require("./apiResponse");
+const Dog = require("../allprograms/breed.js"); 
+const calculator = require("../allprograms/calci.js");
+
+
 exports.variable = (req, res) => {
     const { text } = req.body;
 
@@ -166,5 +170,102 @@ exports.test4 = (req, res) => {
         res,
         "Success",
         { temp, message }
+    );
+};
+
+
+exports.test5 = (req, res) => {
+    const { factor, number } = req.body;
+
+    if (factor === undefined || number === undefined) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "factor and number are required"
+        );
+    }
+
+    if (typeof factor !== "number" || typeof number !== "number") {
+        return APIResponse.validationErrorResponse(
+            res,
+            "factor and number must be numbers"
+        );
+    }
+
+    function createMultiplier(factor) {
+        return function (num) {
+            return num * factor;
+        };
+    }
+
+    const multiply = createMultiplier(factor);
+    const result = multiply(number);
+
+    return APIResponse.successResponse(
+        res,
+        "Success",
+        { factor, number, result }
+    );
+};
+
+
+exports.createDog = (req, res) => {
+    const { name, breed } = req.body;
+
+    if (!name && !breed) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "name and breed are required"
+        );
+    }
+
+    if (!name) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "name is required"
+        );
+    }
+
+    if (!breed) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "breed is required"
+        );
+    }
+
+    const dog = new Dog(name, breed);
+
+    const barkMessage = dog.bark();
+
+    return APIResponse.successResponse(
+        res,
+        "Dog created successfully",
+        {
+            name: dog.name,
+            breed: dog.breed,
+            bark: barkMessage
+        }
+    );
+};
+
+exports.calculatorThis = (req, res) => {
+    const { a, b } = req.body;
+
+    if (a === undefined || b === undefined) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "Both a and b are required"
+        );
+    }
+
+    return APIResponse.successResponse(
+        res,
+        "Calculator operations using this",
+        {
+            using: calculator.name,  
+            addition: calculator.add(a, b),
+            subtraction: calculator.subtract(a, b),
+            multiplication: calculator.multiply(a, b),
+            division: calculator.division(a, b)
+        }
     );
 };

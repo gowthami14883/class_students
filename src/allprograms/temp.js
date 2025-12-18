@@ -4,3 +4,4 @@ if (temp > 30) {
 } else {
     console.log("It's moderate/cool");
 }
+
