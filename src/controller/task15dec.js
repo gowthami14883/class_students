@@ -2,6 +2,8 @@
 const APIResponse = require("./apiResponse");
 const Dog = require("../allprograms/breed.js"); 
 const calculator = require("../allprograms/calci.js");
+const Circle = require("../allprograms/es6.js");
+
 
 
 exports.variable = (req, res) => {
@@ -58,6 +60,8 @@ exports.test1 = (req, res) => {
     );
 };
 
+
+//17th dec 2025
 exports.test2 = (req, res) => {
     const { students } = req.body;
 
@@ -172,7 +176,7 @@ exports.test4 = (req, res) => {
     );
 };
 
-
+//18th dec 2025
 exports.test5 = (req, res) => {
     try {
         const { factor, number } = req.body;
@@ -279,3 +283,87 @@ exports.test7 = (req, res) => {
         }
     );
 };
+
+
+//19th dec 2025
+exports.test8 = (req, res) => {
+  const { radius } = req.body;
+
+  if (radius === undefined) {
+    return APIResponse.validationErrorResponse(res, "radius is required");
+  }
+
+  if (typeof radius !== "number" || radius <= 0) {
+    return APIResponse.validationErrorResponse(
+      res,
+      "radius must be a positive number"
+    );
+  }
+
+  const circle = new Circle(radius);
+  const area = circle.getArea();
+
+  return APIResponse.successResponse(res, "Success", {
+    radius,
+    area,
+  });
+};
+
+exports.test9 = async (req, res) => {
+  try {
+    const promise = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("Data loaded successfully");
+      }, 1500);
+    });
+
+    const message = await promise;
+
+    return APIResponse.successResponse(
+      res,
+      "Success",
+      { message }
+    );
+  } catch (error) {
+    return APIResponse.errorResponse(
+      res,
+      "Internal Server Error",
+      error.message
+    );
+  }
+};
+
+exports.test10 = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return APIResponse.validationErrorResponse(
+        res,
+        "userId is required"
+      );
+    }
+
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${userId}`
+    );
+
+    const user = await response.json();
+
+    return APIResponse.successResponse(
+      res,
+      "Success",
+      {
+        name: user.name,
+        email: user.email
+      }
+    );
+  } catch (error) {
+    return APIResponse.errorResponse(
+      res,
+      "Internal Server Error",
+      error.message
+    );
+  }
+};
+
