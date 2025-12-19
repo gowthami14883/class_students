@@ -30,7 +30,6 @@ exports.variable = (req, res) => {
     );
 };
 
-
 exports.test1 = (req, res) => {
     const { userName,userAge } = req.body;
 
@@ -58,7 +57,6 @@ exports.test1 = (req, res) => {
         { message }
     );
 };
-
 
 exports.test2 = (req, res) => {
     const { students } = req.body;
@@ -144,9 +142,10 @@ exports.test3 = (req, res) => {
 };
 
 exports.test4 = (req, res) => {
+
     const { temp } = req.body;
 
-    if (temp === undefined) {
+    if (!temp) {
         return APIResponse.validationErrorResponse(
             res,
             "temp is required"
@@ -175,36 +174,47 @@ exports.test4 = (req, res) => {
 
 
 exports.test5 = (req, res) => {
-    const { factor, number } = req.body;
+    try {
+        const { factor, number } = req.body;
 
-    if (factor === undefined || number === undefined) {
-        return APIResponse.validationErrorResponse(
+        if (factor === undefined || number === undefined) {
+            return APIResponse.validationErrorResponse(
+                res,
+                "factor and number are required"
+            );
+        }
+
+        if (typeof factor !== "number" || typeof number !== "number") {
+            return APIResponse.validationErrorResponse(
+                res,
+                "factor and number must be numbers"
+            );
+        }
+
+        function createMultiplier(factor) {
+            return function (num) {
+                return num * factor;
+            };
+        }
+
+        const multiply = createMultiplier(factor);
+        const result = multiply(number);
+
+        return APIResponse.successResponse(
             res,
-            "factor and number are required"
+            "Success",
+            { factor, number, result }
+        );
+
+    } catch (error) {
+        console.error("test5 error:", error);
+
+        return APIResponse.errorResponse(
+            res,
+            "Internal Server Error",
+            error.message
         );
     }
-
-    if (typeof factor !== "number" || typeof number !== "number") {
-        return APIResponse.validationErrorResponse(
-            res,
-            "factor and number must be numbers"
-        );
-    }
-
-    function createMultiplier(factor) {
-        return function (num) {
-            return num * factor;
-        };
-    }
-
-    const multiply = createMultiplier(factor);
-    const result = multiply(number);
-
-    return APIResponse.successResponse(
-        res,
-        "Success",
-        { factor, number, result }
-    );
 };
 
 
