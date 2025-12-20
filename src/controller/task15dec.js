@@ -3,6 +3,10 @@ const APIResponse = require("./apiResponse");
 const Dog = require("../allprograms/breed.js"); 
 const calculator = require("../allprograms/calci.js");
 const Circle = require("../allprograms/es6.js");
+const checkLogin = require("../allprograms/promises1.js");
+const getUserProfile = require("../allprograms/promises2.js");
+
+
 
 
 
@@ -367,3 +371,40 @@ exports.test10 = async (req, res) => {
   }
 };
 
+//20th dec 2025 
+exports.test11 = (req, res) => {
+  const { username, password } = req.body;
+
+  checkLogin(username, password)
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        message: result
+      });
+    })
+    .catch((error) => {
+      res.status(401).json({
+        success: false,
+        message: error
+      });
+    });
+};
+
+
+exports.test12 = (req, res) => {
+  const { userId } = req.params;
+
+  getUserProfile(userId)
+    .then((profile) => {
+      res.json({
+        success: true,
+        data: profile
+      });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        success: false,
+        message: err
+      });
+    });
+};
