@@ -5,6 +5,13 @@ const calculator = require("../allprograms/calci.js");
 const Circle = require("../allprograms/es6.js");
 const checkLogin = require("../allprograms/promises1.js");
 const getUserProfile = require("../allprograms/promises2.js");
+const getUser = require("../allprograms/async2.js");
+const sortPermissions = require("../allprograms/sort.js");
+const studentService = require("../allprograms/sorting.js");
+
+
+
+
 
 
 
@@ -407,4 +414,148 @@ exports.test12 = (req, res) => {
         message: err
       });
     });
+};
+
+
+exports.getUser = async (req, res) => {
+  try {
+    const user = await getUser(req.params.id);
+    res.json(user);
+  } catch {
+    res.status(500).json({ error: "Failed" });
+  }
+};
+
+
+//23/12/25
+
+exports.test13 = (req, res) => {
+    const data = req.body;
+
+    // 1️⃣ Check body exists
+    if (!data) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "Request body is required"
+        );
+    }
+
+    // 2️⃣ Must be array
+    if (!Array.isArray(data)) {
+        return APIResponse.validationErrorResponse(
+            res,
+            "Data must be an array"
+        );
+    }
+
+    // 3️⃣ Loop through array
+    for (let i = 0; i < data.length; i++) {
+        const record = data[i];
+
+        // allow null
+        if (record === null) {
+            continue;
+        }
+
+        // record must be object
+        if (typeof record !== "object") {
+            return APIResponse.validationErrorResponse(
+                res,
+                `Record at index ${i} must be an object or null`
+            );
+        }
+
+        const { module_permissions, module_operation_permissions } = record;
+
+        // 4️⃣ Validate module_permissions
+        if (
+            module_permissions !== null &&
+            !Array.isArray(module_permissions)
+        ) {
+            return APIResponse.validationErrorResponse(
+                res,
+                `module_permissions must be array or null at index ${i}`
+            );
+        }
+
+        // 5️⃣ Validate module_operation_permissions
+        if (
+            module_operation_permissions !== null &&
+            !Array.isArray(module_operation_permissions)
+        ) {
+            return APIResponse.validationErrorResponse(
+                res,
+                `module_operation_permissions must be array or null at index ${i}`
+            );
+        }
+
+        // 6️⃣ Validate inner objects
+        const validateInnerObjects = (arr, index) => {
+            for (let obj of arr) {
+                if (!obj.org_title_id || !obj.module_title_id) {
+                    return APIResponse.validationErrorResponse(
+                        res,
+                        `org_title_id and module_title_id are required at index ${index}`
+                    );
+                }
+
+                if (
+                    typeof obj.org_title_id !== "string" ||
+                    typeof obj.module_title_id !== "string"
+                ) {
+                    return APIResponse.validationErrorResponse(
+                        res,
+                        `Keys must be strings at index ${index}`
+                    );
+                }
+            }
+            return null;
+        };
+
+        if (module_permissions) {
+            const error = validateInnerObjects(module_permissions, i);
+            if (error) return error;
+        }
+
+        if (module_operation_permissions) {
+            const error = validateInnerObjects(module_operation_permissions, i);
+            if (error) return error;
+        }
+    }
+
+    // ✅ SUCCESS
+    return APIResponse.successResponse(
+        res,
+        "Permissions data validated successfully"
+    );
+};
+
+
+//24/12/25
+
+
+exports.sortStudents = (req, res) => {
+  const { sortBy } = req.body;
+
+  if (!sortBy) {
+    return APIResponse.validationErrorResponse(
+      res,
+      "sortBy is required"
+    );
+  }
+
+  const result = studentService.sortStudents(sortBy);
+
+  if (!result) {
+    return APIResponse.validationErrorResponse(
+      res,
+      "Invalid sortBy value. Use id, name, place, or marks"
+    );
+  }
+
+  return APIResponse.successResponse(
+    res,
+    "Students sorted successfully",
+    result
+  );
 };

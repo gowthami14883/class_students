@@ -16,11 +16,9 @@ router.post("/test9", taskController.test9);
 router.post("/test10", taskController.test10);
 router.post("/test11", taskController.test11);
 router.get("/test12/:userId", taskController.test12);
-
-
-
-
-
+router.get("/getUser/:id", taskController.getUser);
+router.post("/test13",taskController.test13);
+router.post("/students/sort", taskController.sortStudents);
 
 
 
