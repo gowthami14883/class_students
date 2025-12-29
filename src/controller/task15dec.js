@@ -11,12 +11,6 @@ const studentService = require("../allprograms/sorting.js");
 
 
 
-
-
-
-
-
-
 exports.variable = (req, res) => {
     const { text } = req.body;
 

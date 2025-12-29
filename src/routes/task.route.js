@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controller/task15dec");
+const taskController1 = require("../controller/task29dec");
+
+
 
 
 router.post("/variable", taskController.variable);
@@ -19,6 +22,8 @@ router.get("/test12/:userId", taskController.test12);
 router.get("/getUser/:id", taskController.getUser);
 router.post("/test13",taskController.test13);
 router.post("/students/sort", taskController.sortStudents);
+router.post("/reverse", taskController1.reverse);
+
 
 
 
