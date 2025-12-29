@@ -1,5 +1,5 @@
 const APIResponse = require("./apiResponse");
-const reverseStringKeepSymbols = require("../allprograms/reverse.js");
+const reverseStringKeepLettersBySegment = require("../allprograms/reverse.js");
 
 exports.reverse = (req, res) => { 
     const { userName } = req.body;
@@ -11,13 +11,12 @@ exports.reverse = (req, res) => {
         ); 
     }
 
-    const reversed = reverseStringKeepSymbols(userName);
+    const reversed = reverseStringKeepLettersBySegment(userName);
 
     return APIResponse.successResponse(
         res,
         "Success",
-        { message: reversed } // only reversed string
+        { message: reversed }
     );
 };
-
 

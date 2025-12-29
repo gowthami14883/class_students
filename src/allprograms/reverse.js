@@ -1,19 +1,22 @@
-function reverseStringKeepSymbols(str) {
-    const letters = str.split('').filter(c => /[a-zA-Z]/.test(c));
-    letters.reverse();
-
-    let result = '';
-    let letterIndex = 0;
-
+function reverseStringKeepLettersBySegment(str) {
+    const result = [];
+    let segment = '';
+    
     for (let char of str) {
         if (/[a-zA-Z]/.test(char)) {
-            result += letters[letterIndex++];
+            segment += char; 
         } else {
-            result += char;
+            
+            result.push(segment.split('').reverse().join(''));
+            result.push(char); 
+            segment = ''; 
         }
     }
+    if (segment) {
+        result.push(segment.split('').reverse().join(''));
+    }
 
-    return result;
+    return result.join('');
 }
 
-module.exports = reverseStringKeepSymbols;
+module.exports = reverseStringKeepLettersBySegment;
